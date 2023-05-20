@@ -52,6 +52,21 @@ class App extends Component {
     );
   };
 
+  componentDidMount() {
+    const todos = localStorage.getItem('todos');
+    const parsedTodos = JSON.parse(todos);
+
+    if (parsedTodos) {
+      this.setState({ todos: parsedTodos });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.todos !== prevState.todos) {
+      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    }
+  }
+
   render() {
     const {
       deleteTodo,
