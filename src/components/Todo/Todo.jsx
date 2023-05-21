@@ -1,6 +1,9 @@
 import React from 'react';
 import './Todo.css';
 
+import IconButton from 'components/IconButton/IconButton';
+import { ReactComponent as DeleteTodo } from '../../icons/delete.svg';
+
 const Todo = ({ text, completed, onToggle, onDelete }) => {
   return (
     <>
@@ -21,7 +24,12 @@ const Todo = ({ text, completed, onToggle, onDelete }) => {
           {text}
         </p>
       </div>
-      <button onClick={onDelete}>Delete</button>
+
+      {/* <button onClick={onDelete}>Delete</button> */}
+
+      <IconButton onClick={onDelete}>
+        <DeleteTodo width="24" height="24" fill="white" />
+      </IconButton>
     </>
   );
 };

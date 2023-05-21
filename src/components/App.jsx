@@ -3,16 +3,32 @@ import { nanoid } from 'nanoid';
 
 import { Container } from './App.styled';
 
+// ###### Todos
+
 import todos from '../data/todoList';
 import TodoList from './TodoList';
 import TodoEditor from './TodoEditor/TodoEditor';
 import { Filter } from './Filter/Filter';
 
+// ###### Modal
+
+import Modal from './Modal/Modal';
+
+// ###### Icon buttons
+
+import IconButton from './IconButton/IconButton';
+import { ReactComponent as AddIcon } from '../icons/add.svg';
+
+// #########################################
+
 class App extends Component {
   state = {
     todos,
     filter: '',
+    showModal: false,
   };
+
+  // ###### Todos
 
   changeFilter = event => {
     this.setState({ filter: event.currentTarget.value });
@@ -28,6 +44,11 @@ class App extends Component {
     this.setState(({ todos }) => ({
       todos: [todo, ...todos],
     }));
+
+    // Close modal after adding a new todo:
+    // this.toggleModal();
+
+    // !!! See alternative solution under componentDidUpdate
   };
 
   deleteTodo = todoId => {
@@ -52,6 +73,16 @@ class App extends Component {
     );
   };
 
+  // ###### Modal
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
+  // ###### Lifecycle
+
   componentDidMount() {
     const todos = localStorage.getItem('todos');
     const parsedTodos = JSON.parse(todos);
@@ -62,10 +93,20 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.todos !== prevState.todos) {
-      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    const nextTodos = this.state.todos;
+    const prevTodos = prevState.todos;
+
+    if (nextTodos !== prevTodos) {
+      localStorage.setItem('todos', JSON.stringify(nextTodos));
+    }
+
+    // Close modal after adding a new todo
+    if (nextTodos.length > prevTodos.length && prevTodos.length !== 0) {
+      this.toggleModal();
     }
   }
+
+  // ###### render
 
   render() {
     const {
@@ -73,12 +114,22 @@ class App extends Component {
       addTodo,
       changeFilter,
       getVisibleTodos,
-      state: { filter },
+      toggleModal,
+      state: { filter, showModal },
     } = this;
 
     return (
       <Container>
-        <TodoEditor onSubmit={addTodo} />
+        <IconButton onClick={toggleModal}>
+          <AddIcon width="20" height="20" fill="white" />
+        </IconButton>
+
+        {showModal && (
+          <Modal onClose={toggleModal}>
+            <TodoEditor onSubmit={addTodo} />
+          </Modal>
+        )}
+
         <Filter value={filter} onChange={changeFilter} />
         <TodoList
           todos={getVisibleTodos()}
