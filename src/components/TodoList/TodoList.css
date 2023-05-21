@@ -18,12 +18,6 @@
   padding: 10px;
 }
 
-.todoList__left-side-wrapper {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-
 .todoList__stat {
   width: 400px;
 }

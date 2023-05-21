@@ -1,0 +1,5 @@
+.todoList__left-side-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
