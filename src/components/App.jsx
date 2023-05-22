@@ -120,7 +120,7 @@ class App extends Component {
 
     return (
       <Container>
-        <IconButton onClick={toggleModal}>
+        <IconButton onClick={toggleModal} aria-label="Compose a new todo">
           <AddIcon width="20" height="20" fill="white" />
         </IconButton>
 
